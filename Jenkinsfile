@@ -1,13 +1,13 @@
 pipeline
 {
-    agent any
+    agent any 
     stages
     {
         stage('Download')
         {
             steps
             {
-                git 'https://github.com/IntelliqDevops/maven.git'
+                git 'https://github.com/kumari-velpuri-2004/Maven.git'
             }
         }
         stage('Build')
@@ -21,22 +21,23 @@ pipeline
         {
             steps
             {
-                deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: 'c6ec7649-5a47-44a3-bb07-a1c52b3f103c', path: '', url: 'http://172.31.12.37:8080')], contextPath: 'testapp', war: '**/*.war'
+                sh 'scp /var/lib/jenkins/workspace/DeclarativePipeline1/webapp/target/webapp.war ubuntu@172.31.22.88:/var/lib/tomcat10/testapp.war'
             }
         }
         stage('Testing')
         {
             steps
             {
-                git 'https://github.com/IntelliqDevops/FunctionalTesting.git'
+                git 'https://github.com/kumari-velpuri-2004/FunctionalTesting.git'
                 sh 'java -jar /var/lib/jenkins/workspace/DeclarativePipeline1/testing.jar'
+
             }
         }
         stage('Delivery')
         {
             steps
             {
-                deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: 'c6ec7649-5a47-44a3-bb07-a1c52b3f103c', path: '', url: 'http://172.31.5.132:8080')], contextPath: 'prodapp', war: '**/*.war'
+                sh 'scp /var/lib/jenkins/workspace/DeclarativePipeline1/webapp/target/webapp.war ubuntu@172.31.26.195:/var/lib/tomcat10/prodapp.war'
             }
         }
     }
