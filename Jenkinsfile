@@ -9,17 +9,4 @@ node('built-in')
     {
         cicd.buildArtifact()
     }
-    stage('Deploy')
-    {
-        cicd.deployTomcat("172.31.22.88","testapp2")
-    }
-    stage('Testing')
-    {
-        cicd.gitDownload("FunctionalTesting")
-        cicd.runSelenium()
-    }
-    stage('Delivery')
-    {
-        cicd.deployTomcat("172.31.26.195","prodapp2")
-    }
 }
