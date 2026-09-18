@@ -1,44 +1,25 @@
-pipeline
+@Library('mylibrary')_
+node('built-in')
 {
-    agent any 
-    stages
+    stage('Download')
     {
-        stage('Download')
-        {
-            steps
-            {
-                git 'https://github.com/kumari-velpuri-2004/Maven.git'
-            }
-        }
-        stage('Build')
-        {
-            steps
-            {
-                sh 'mvn package'
-            }
-        }
-        stage('Deployment')
-        {
-            steps
-            {
-                sh 'scp /var/lib/jenkins/workspace/DeclarativePipeline1/webapp/target/webapp.war ubuntu@172.31.22.88:/var/lib/tomcat10/testapp.war'
-            }
-        }
-        stage('Testing')
-        {
-            steps
-            {
-                git 'https://github.com/kumari-velpuri-2004/FunctionalTesting.git'
-                sh 'java -jar /var/lib/jenkins/workspace/DeclarativePipeline1/testing.jar'
-
-            }
-        }
-        stage('Delivery')
-        {
-            steps
-            {
-                sh 'scp /var/lib/jenkins/workspace/DeclarativePipeline1/webapp/target/webapp.war ubuntu@172.31.26.195:/var/lib/tomcat10/prodapp.war'
-            }
-        }
+        cicd.gitDownload("Maven")
+    }
+    stage('Build')
+    {
+        cicd.buildArtifact()
+    }
+    stage('Deploy')
+    {
+        cicd.deployTomcat("172.31.22.88","testapp2")
+    }
+    stage('Testing')
+    {
+        cicd.gitDownload("FunctionalTesting")
+        cicd.runSelenium()
+    }
+    stage('Delivery')
+    {
+        cicd.deployTomcat("172.31.26.195","prodapp2")
     }
 }
