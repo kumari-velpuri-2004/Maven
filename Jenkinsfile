@@ -11,15 +11,15 @@ node('built-in')
     }
     stage('Deploy')
     {
-        cicd.deployTomcat("172.31.22.88","testapp2")
+        cicd.deployTomcat("ScriptedPipelineSharedLibraries","172.31.22.88","testapp2")
     }
     stage('Testing')
     {
         cicd.gitDownload("FunctionalTesting")
-        cicd.runSelenium()
+        cicd.runSelenium("ScriptedPipelineSharedLibraries")
     }
     stage('Delivery')
     {
-        cicd.deployTomcat("172.31.26.195","prodapp2")
+        cicd.deployTomcat("SriptedPipelineSharedLibraries","172.31.26.195","prodapp2")
     }
 }
